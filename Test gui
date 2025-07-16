@@ -54,8 +54,8 @@ TextButton.Transparency = 0
 coroutine.wrap(SMIAOGD_fake_script)()
 local function NFCJZ_fake_script() -- TextButton.Script 
 	local script = Instance.new('Script', TextButton)
-	
-	local button = script.Parent
+
+local button = script.Parent
 local decalAssetId = 15705773225
 local skyboxAssetId = 15705773225
 
