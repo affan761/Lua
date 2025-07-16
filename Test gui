@@ -48,7 +48,6 @@ TextButton.MaxVisibleGraphemes = -1
 TextButton.Transparency = 0
 TextButton.Rotation = 0
 TextButton.Transparency = 0
-
 local button = script.Parent
 local decalID = 82391807307131
 
