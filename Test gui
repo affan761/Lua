@@ -1,27 +1,93 @@
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
-local decal = Instance.new("ScreenGui")
-decal.Name = "decal"
-decal.Parent = player:WaitForChild("PlayerGui")
-decal.ResetOnSpawn = false
-decal.ResetOnSpawn = true
-decal.ZIndexBehavior = Enum.ZIndexBehavior.Global
-decal.DisplayOrder = 0
-decal.IgnoreGuiInset = false
-decal.Enabled = true
-decal.SelectionGroup = false
+local gui = Instance.new("ScreenGui")
+gui.Name = "gui"
+gui.Parent = player:WaitForChild("PlayerGui")
+gui.ResetOnSpawn = false
+gui.ResetOnSpawn = true
+gui.ZIndexBehavior = Enum.ZIndexBehavior.Global
+gui.DisplayOrder = 0
+gui.IgnoreGuiInset = false
+gui.Enabled = true
+gui.SelectionGroup = false
+
+local Frame = Instance.new("Frame")
+Frame.Name = "Frame"
+Frame.Parent = gui
+Frame.Size = UDim2.new(0, 200, 0, 200)
+Frame.Position = UDim2.new(0, 0, 0, 0)
+Frame.AnchorPoint = Vector2.new(0, 0)
+Frame.Visible = true
+Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BackgroundTransparency = 0
+Frame.BorderColor3 = Color3.fromRGB(0, 0, 255)
+Frame.BorderSizePixel = 1
+Frame.ClipsDescendants = false
+Frame.LayoutOrder = 0
+Frame.Selectable = false
+Frame.SelectionGroup = false
+Frame.SizeConstraint = Enum.SizeConstraint.RelativeXY
+Frame.Rotation = 0
+Frame.AutomaticSize = Enum.AutomaticSize.None
+Frame.Transparency = 0
+Frame.Rotation = 0
+Frame.Transparency = 0
+
+local function dragify(Main)
+    if not Main then return error("Invalid Main object provided to dragify") end --Error handling
+        
+        local dragToggle = false
+        local dragSpeed = 0.95 
+        local dragInput = nil
+        local initialDragPosition = nil
+        local initialPosition = nil
+        
+        local function updateInput(input)
+            local delta = input.Position - initialDragPosition
+            local newPosition = UDim2.new(initialPosition.X.Scale, initialPosition.X.Offset + delta.X * dragSpeed, initialPosition.Y.Scale, initialPosition.Y.Offset + delta.Y * dragSpeed)
+            game:GetService("TweenService"):Create(Main, TweenInfo.new(0.15, Enum.EasingStyle.Linear), {Position = newPosition}):Play() --Adjusted Tween time and easing
+        end
+        
+        Main.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                dragToggle = true
+                initialDragPosition = input.Position
+                initialPosition = Main.Position
+                input.Changed:Connect(function()
+                    if input.UserInputState == Enum.UserInputState.End then
+                        dragToggle = false
+                    end
+                end)
+            end
+        end)
+        
+        Main.InputChanged:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+                dragInput = input
+            end
+        end)
+        
+        game:GetService("UserInputService").InputChanged:Connect(function(input)
+            if input == dragInput and dragToggle then
+                updateInput(input)
+            end
+        end)
+    end
+    
+    dragify(script.Parent)
+
 
 local TextButton = Instance.new("TextButton")
 TextButton.Name = "TextButton"
-TextButton.Parent = decal
-TextButton.Size = UDim2.new(0, 200, 0, 50)
-TextButton.Position = UDim2.new(0, 0, 0, 0)
+TextButton.Parent = Frame
+TextButton.Size = UDim2.new(0, 60, 0, 40)
+TextButton.Position = UDim2.new(0, 70, 0, 70)
 TextButton.AnchorPoint = Vector2.new(0, 0)
 TextButton.Visible = true
-TextButton.BackgroundColor3 = Color3.fromRGB(162, 162, 162)
+TextButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 TextButton.BackgroundTransparency = 0
-TextButton.BorderColor3 = Color3.fromRGB(27, 42, 53)
+TextButton.BorderColor3 = Color3.fromRGB(0, 0, 255)
 TextButton.BorderSizePixel = 1
 TextButton.ClipsDescendants = false
 TextButton.LayoutOrder = 0
@@ -31,8 +97,8 @@ TextButton.SizeConstraint = Enum.SizeConstraint.RelativeXY
 TextButton.Rotation = 0
 TextButton.AutomaticSize = Enum.AutomaticSize.None
 TextButton.Font = Enum.Font.Legacy
-TextButton.Text = "decalspam"
-TextButton.TextColor3 = Color3.fromRGB(27, 42, 53)
+TextButton.Text = "test"
+TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 TextButton.TextSize = 8
 TextButton.TextScaled = false
 TextButton.TextWrapped = false
@@ -49,11 +115,7 @@ TextButton.Transparency = 0
 TextButton.Rotation = 0
 TextButton.Transparency = 0
 
--- Scripts:
-
-coroutine.wrap(SMIAOGD_fake_script)()
-local function NFCJZ_fake_script() -- TextButton.Script 
-	local script = Instance.new('Script', TextButton)
+TextButton.MouseButton1Down:connect(function()
 
 local button = script.Parent
 local decalID = 82391807307131
