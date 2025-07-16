@@ -56,58 +56,46 @@ local function NFCJZ_fake_script() -- TextButton.Script
 	local script = Instance.new('Script', TextButton)
 
 local button = script.Parent
-local decalAssetId = 15705773225
-local skyboxAssetId = 15705773225
+local decalID = 82391807307131
 
-local function modifyWorkspace()
-    local function replaceDecals(part)
-        for _, decal in pairs(part:GetChildren()) do
-            if decal:IsA("Decal") then
-                decal:Destroy()
-            end
+local function applyDecal(part)
+    if part and part:IsA("BasePart") then
+        local existingDecal = part:FindFirstChildOfClass("Decal")
+        if existingDecal then
+            existingDecal:Destroy()
         end
-        for _, face in pairs({"Front", "Back", "Right", "Left", "Top", "Bottom"}) do
-            local decal = Instance.new("Decal", part)
-            decal.Texture = "rbxassetid://" .. decalAssetId
-            decal.Face = Enum.NormalId[face]
-        end
+        local One = Instance.new("Decal", part)
+        local Two = Instance.new("Decal", part)
+        local Three = Instance.new("Decal", part)
+        local Four = Instance.new("Decal", part)
+        local Five = Instance.new("Decal", part)
+        local Six = Instance.new("Decal", part)
+        One.Texture = "http://www.roblox.com/asset/?id=" .. decalID
+        Two.Texture = "http://www.roblox.com/asset/?id=" .. decalID
+        Three.Texture = "http://www.roblox.com/asset/?id=" .. decalID
+        Four.Texture = "http://www.roblox.com/asset/?id=" .. decalID
+        Five.Texture = "http://www.roblox.com/asset/?id=" .. decalID
+        Six.Texture = "http://www.roblox.com/asset/?id=" .. decalID
+        One.Face = "Front"
+        Two.Face = "Back"
+        Three.Face = "Right"
+        Four.Face = "Left"
+        Five.Face = "Top"
+        Six.Face = "Bottom"
     end
+end
 
-    local function processParts(root)
-        for _, child in pairs(root:GetChildren()) do
-            if child:IsA("BasePart") then
-                replaceDecals(child)
-            end
-            processParts(child)
-        end
-    end
-
-    processParts(workspace)
-
-
-    local lighting = game.Lighting
-    lighting.SkyboxBk = "rbxassetid://" .. skyboxAssetId
-    lighting.SkyboxDn = "rbxassetid://" .. skyboxAssetId
-    lighting.SkyboxFt = "rbxassetid://" .. skyboxAssetId
-    lighting.SkyboxLf = "rbxassetid://" .. skyboxAssetId
-    lighting.SkyboxRt = "rbxassetid://" .. skyboxAssetId
-    lighting.SkyboxUp = "rbxassetid://" .. skyboxAssetId
-    lighting.TimeOfDay = 12
-
-
-    for _, player in pairs(game.Players:GetPlayers()) do
-        local character = player.Character
-        if character then
-            local torso = character:WaitForChild("Torso")
-            if torso then
-                local emitter = Instance.new("ParticleEmitter", torso)
-                emitter.Texture = "rbxassetid://" .. decalAssetId
-                emitter.VelocitySpread = 20
-            end
+local function applyDecalsToAll(root)
+    for _, child in pairs(root:GetChildren()) do
+        if child:IsA("BasePart") then
+            applyDecal(child)
+        elseif child:IsA("Model") then
+            applyDecalsToAll(child)
         end
     end
 end
 
-button.MouseButton1Click:Connect(modifyWorkspace)
-
+button.MouseButton1Click:Connect(function()
+    applyDecalsToAll(workspace)
+end)
 
